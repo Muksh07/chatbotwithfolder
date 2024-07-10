@@ -1,0 +1,57 @@
+<div class="container mt-5">
+  <h2>Chatbot</h2>
+  <div class="card">
+    <div class="card-body">
+      <div *ngFor="let message of messages">
+        <div *ngIf="message.isUser" class="alert alert-primary">
+          {{message.text}}
+        </div>
+        <div *ngIf="!message.isUser" class="alert alert-secondary">
+          {{message.text}}
+        </div>
+      </div>
+      <div class="input-group mt-3">
+        <input [(ngModel)]="userMessage" type="text" class="form-control" placeholder="Type your message...">
+        <button (click)="sendMessage()" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="folderStructure">
+    <h3>Generated Folder Structure:</h3>
+    <ul>
+      <li>{{ folderStructure.name }}
+        <ul>
+          <li *ngFor="let file of folderStructure.files" class="file" (click)="displayFileContent(file.content)">
+            {{ file.name }}
+          </li>
+          <ng-container *ngFor="let folder of folderStructure.folders">
+            <li>
+              <span (click)="toggleFolder(folder)">{{ folder.name }}</span>
+              <ul *ngIf="folder.expanded">
+                <li *ngFor="let file of folder.files" class="file" (click)="displayFileContent(file.content)">
+                  {{ file.name }}
+                </li>
+                <ng-container *ngFor="let subfolder of folder.folders">
+                  <li>
+                    <span (click)="toggleFolder(subfolder)">{{ subfolder.name }}</span>
+                    <ul *ngIf="subfolder.expanded">
+                      <li *ngFor="let subfile of subfolder.files" class="file" (click)="displayFileContent(subfile.content)">
+                        {{ subfile.name }}
+                      </li>
+                    </ul>
+                  </li>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="selectedFileContent !== ''">
+    <h3>File Content:</h3>
+    <pre>{{ selectedFileContent }}</pre>
+  </div>
+</div>
